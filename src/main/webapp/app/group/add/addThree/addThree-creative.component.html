@@ -1,0 +1,68 @@
+
+    <div class="content mt20">
+        <div class="bg-fff mt20 mb20">
+            <div class="d-flex pd1-2">
+                <div class="fontS16 ml10"><span>设置计划</span>----</div>
+                <div class="fontS16"><span>设置单元</span>----</div>
+                <div class="fontS16"><span class="primary-color">添加创意</span>----</div>
+                <div class="fontS16"><span>完成创建</span></div>
+            </div>
+            <div class="ml20 mr20">
+                <div class="pd1-2 border-b d-flex align-items-baseline bg-fa">
+                    <div class="fontS16">添加创意</div>
+                    <div class="d-flex align-items-baseline ml20">
+                        <span>创意万花筒</span>
+                        <span>开关</span>
+                        <span class="ml20">开启该功能将使您的创意更丰富多变，获取更多优质流量。</span>
+                    </div>
+                </div>
+                <div class="pl20 pt20">
+                    <span class="warning">投放提示：</span>
+                    1、本地上传图片时不允许上传与宝贝无关的图片；2、为保证投放效果，请选择浅色背景、无牛皮癣、无边框水印、少文字、清晰度高的创意；3、建议添加多张创意，测试点击效果，择优选择
+                </div>
+                <div class="pd20"  *ngIf="engineGroup.items">
+                    <ng-template ngFor let-item [ngForOf]="engineGroup.items" let-i="index">
+                        <div class="d-flex border" >
+                            <div class="widthP24 pd20 bg-fa">
+
+                                <div class="pb10 left-creativeTitle">单元：{{item.unitName}}</div>
+
+                                <div class="d-flex left-content">
+                                    <div style="width:118px">
+                                        <img class="widthP100" src="{{item.picUrl}}">
+                                    </div>
+                                    <ul class="pl10">
+                                        <a href="https://detail.tmall.com/item.htm?spm=a2et4.11816909.88888888.d76e5037c.157c1f56LUjV1E&id={{item.id}}"><li class="left-imgTitle">{{item.title}}</li></a>
+                                        <li>价格：{{item.price}}元</li>
+                                        <li>销量：{{item.soldQuantity}}</li>
+                                        <li>库存：{{item.num}}</li>
+                                        <li>发布日期：{{item.modified |date:'yyyy-MM-dd'}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="widthP74 pd20 right-imgShow">
+                                <div class="pb10">创意预览（本地上传）：</div>
+                                    <div class="d-flex">
+                                    <ng-template ngFor let-url [ngForOf]="item.itemImgs" let-i="index" >
+                                    <div style="width:80px" class="mr10"><a (click)="addCreative(item.id,url.url,url.id)"><img class="widthP100" src="{{url.url}}"  ></a></div>
+                                    <!--<div style="width:80px" class="mr10"><a><img class="widthP100" src="images/img123.jpg"></a></div>-->
+                                    <!--<div style="width:80px" class="mr10"><a><img class="widthP100" src="images/img123.jpg"></a></div>-->
+                                    </ng-template>
+                                    <div></div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </ng-template>
+                 </div>
+            </div>
+            <div class="pd20 ml20 mb20">
+                <button class="btn-scondary btn mr-3" (click)="pretStep()" >返回上一步</button>
+               <button class="btn-primary btn" (click)="end()">下一步，完成</button>
+            </div>
+        </div>
+
+    </div>
+

@@ -1,0 +1,199 @@
+<div class="content">
+    <div class="content mt20 plan">
+        <div class="bg-fff mt20 pb20">
+            <div>
+                <div *ngIf="campaignName != undefined">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a routerLink="/campaign" style="color:#3c7bfc;font-size: 13px;text-decoration : none;vertical-align:middle">所有商品推广计划 <img src="../../content/images/dayuhao.png"> </a><span style="vertical-align:middle">计划：{{campaignName}}</span>
+                </div>
+                <div class="d-flex justify-content-between border-b date-title align-items-center">
+                    <ul class="d-flex">
+                        <li *ngIf="campaignShow"><a routerLink="/campaign">计划</a></li>
+                        <li><a routerLink="/group"[queryParams]="{campaignId:campaignId,campaignName: campaignName}" style="color:#3c7bfc">单元</a></li>
+                        <li><a routerLink="/crowd"[queryParams]="{campaignId:campaignId,campaignName: campaignName}">定向</a></li>
+                        <li><a routerLink="/location"[queryParams]="{campaignId:campaignId,campaignName: campaignName}">资源位</a></li>
+                        <li><a routerLink="/creative"[queryParams]="{campaignId:campaignId,campaignName: campaignName}">创意</a></li>
+                    </ul>
+                    <div class="mr20 d-flex align-items-center">
+                        <cjtj-report-date-select  (onSelectChange)="onDateSelectChange($event)"></cjtj-report-date-select>
+                        <input type="text" class="pdl10" placeholder="单元名称" [(ngModel)]="queryParams.groupName" (ngModelChange)="query()">
+                        <!--                        <div><button class="btn btn-scondary ml10">更多数据</button></div>-->
+                        <cjtj-report-columns-select business="adgroup" (onSelectChange)="onColumnsSelectChange($event)"></cjtj-report-columns-select>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex justify-content-between plan-btn">
+                        <div class="d-flex align-items-center">
+                            <button class="btn-primary btn mr10"  routerLink="/group/addGroup"[queryParams]="{campaignId:campaignId}">新建推广单元</button>
+                            <button class="btn-scondary btn mr10"
+                                    aria-hidden="true"
+                                    cjtjConfirmationPopover
+                                    title="批量设置状态"
+                                    placement = "bottom"
+                                    [contentTemplate]="batchUpdateStatus"
+                                    (confirm)="submitBatchUpdateGroupStatus()">批量修改状态</button>
+                            <a><button class="btn-scondary btn mr10">批量复制</button></a>
+                            <!--<a><button class="btn-scondary btn mr10">批量修改状态</button></a>-->
+                            <a><button type="button" class="btn btn-scondary mr-2"
+                                    cjtjConfirmationPopover
+                                    title="提示"
+                                    [onBeforePopover]="popoverCheck"
+                                    message="确定删除选择的推广组，直通车后台会同步删除？"
+                                    (confirm)="batchDeleteGroups()">批量删除</button> </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mlrP1">
+                <table class="table table-hover">
+                    <thead>
+                    <!--<tr>-->
+                        <!--<th>-->
+                            <!--<input type="checkbox">-->
+                        <!--</th>-->
+                        <!--<th>状态</th>-->
+                        <!--<th>单元信息</th>-->
+                        <!--<th>出价方式</th>-->
+                        <!--<th>消耗</th>-->
+                        <!--<th>展现量</th>-->
+                        <!--<th>点击量</th>-->
+                        <!--<th>点击率</th>-->
+                        <!--<th>展现成本</th>-->
+                        <!--<th>点击成本</th>-->
+                        <!--<th>收藏宝贝量</th>-->
+                        <!--<th>添加购物车量</th>-->
+                        <!--<th>投资回报率</th>-->
+                        <!--<th>成交订单量</th>-->
+                        <!--<th>成交订单金额</th>-->
+                        <!--<th>点击转化率</th>-->
+                    <!--</tr>-->
+                    <tr>
+                        <th>
+                        <input type="checkbox"[(ngModel)]="allSelect" (change)="clickSelectAll()">
+                        </th>
+                        <th>状态</th>
+                        <th>单元信息</th>
+                        <th>出价方式</th>
+                        <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                            <th *ngIf="selectColumns.indexOf(reportField.field) >= 0" >
+                                {{reportField.title}}
+                            </th>
+                        </ng-template>
+                    </tr>
+
+                    </thead>
+                    <tbody *ngIf="groups">
+                    <ng-template ngFor let-group [ngForOf]="groups" let-i="index">
+                    <tr>
+                        <td>
+                            <input type="checkbox" [(ngModel)]="group.checked">
+                        </td>
+
+                        <td >
+                            <div class="putInstatus">
+                                <div class="putInshow">
+                                    <img *ngIf="group.info.status === 'START'" class="widthP100" src="../../content/images//open.png">
+                                    <img *ngIf="group.info.status === 'PAUSE'" class="widthP100" src="../../content/images/stop.png">
+                                    <img *ngIf="group.info.status === 'TERMINATE'" class="widthP100" src="../../content/images/delete.png">
+                                </div>
+                                <ul  *ngIf="group.info.status!='TERMINATE'" class="putInstatus-list">
+                                    <li class="d-flex align-items-center pd10" (click)="updateGroupStatus(group,'START')">
+                                        <div >
+                                            <img src="../../content/images/open.png">
+                                        </div>
+                                        <span class="ml6">正在投放</span>
+                                        <i class="ml20"><img  *ngIf="group.info.status === 'START'" src="../../content/images/ok.png"></i>
+                                    </li>
+                                    <li class="d-flex align-items-center pd10" (click)="updateGroupStatus(group,'PAUSE')">
+                                        <div >
+                                            <img src="../../content/images/stop.png">
+                                        </div>
+                                        <span class="ml6">暂停投放</span>
+                                        <i class="ml20"><img *ngIf="group.info.status === 'PAUSE'" src="../../content/images/ok.png"></i>
+                                    </li>
+                                    <li class="d-flex align-items-center pd10">
+                                        <div cjtjConfirmationPopover
+                                             title="提示"
+                                             message="是否确认终止单元？单元终止后将自动投放结束，无法进行编辑？"
+                                             (confirm)="updateGroupStatus(group,'TERMINATE')" >
+                                            <img src="../../content/images/delete.png">
+                                        </div>
+                                        <span class="ml6" >结束投放</span>
+                                        <i class="ml20">
+                                        <img *ngIf="group.info.status === 'TERMINATE'" src="../../content/images/ok.png">
+                                        </i>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </td>
+
+                            <td>
+                                <div class="d-flex left-content align-items-center pd1-0">
+                                    <div style="width:68px">
+                                        <img class="widthP100" src="{{group.info.picUrl}}">
+                                    </div>
+                                    <ul class="pl10" style="width:168px;">
+                                        <a class="ml6 color333" routerLink="/crowd" [queryParams]="{campaignId:group.info.campaignId,campaignName:group.info.campaignName,groupId:group.info.groupId,groupName:group.info.groupName,itemId:group.info.itemId}">{{group.info.groupName}}</a>
+                                        <i class="ml6">
+                                            <img src="../../content/images/icon-pencil.png"
+                                                 aria-hidden="true"
+                                                 cjtjConfirmationPopover
+                                                 title="修改单元名称"
+                                                 [contentTemplate]="updateGroupNameTemplate"
+                                                 (onPopover)="editGroupNameFn(group.info.groupName)"
+                                                 (confirm)="submitUpdateGroupName(group.info)">
+                                        </i>
+                                        <li class="color999">计划:<span class="color-h-brand">{{group.info.campaignName}}</span></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        <td>
+                            <div>--</div>
+                        </td>
+                        <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                            <td  *ngIf="selectColumns.indexOf(reportField.field) >= 0">{{group.report? reportField.isLZY? (group.report[reportField.field] | fzy) :group.report[reportField.field] : 0 }}</td>
+                        </ng-template>
+
+                    </tr>
+                    </ng-template>
+
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div class="mt-2 page">
+    <cjtj-pagination #pagination [setCount]="filteredGroups.length" [setPage]="page" [pageSize]="pageSize" (onPageChange)="pageChange($event)" ></cjtj-pagination>
+</div>
+
+<ng-template #updateGroupNameTemplate>
+    <div class="batch_modify_keyword_price d-flex mt-2">
+        <div class="mb-1">修改单元名称：</div>
+        <div class="total-change ml-1 mb-2">
+            <div class="select-sm" >
+                <label>
+                    <input class="border-c width-4 height1d6 mr-1"  [(ngModel)]="editGroupName">
+                </label>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #batchUpdateStatus>
+    <div class="batch_modify_keyword_price d-flex mt-2">
+        <div class="total-change ml-1 mb-2">
+            <div class="select-sm" >
+                    <div>
+                        <input type="radio" value="start" name="aa" [(ngModel)]="editGroupStatus"> <span (click)="clickRadio('start')">批量投放</span>
+                        <input type="radio" value="pause" name="aa" [(ngModel)]="editGroupStatus"> <span (click)="clickRadio('pause')">批量暂停</span>
+                        <input type="radio" value="terminate" name="aa" [(ngModel)]="editGroupStatus"> <span (click)="clickRadio('terminate')"> 批量停止 </span>
+                    </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

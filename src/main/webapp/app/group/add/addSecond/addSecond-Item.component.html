@@ -1,0 +1,91 @@
+<div class="bg-fff mlr-auto">
+    <div class="border-b modal-header">
+        <h6>添加推广宝贝</h6>
+    </div>
+    <div class="modal-body pd20">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <div>
+                    <button class="btn btn-primary">全部宝贝</button>
+                    <!--<button class="btn btn-scondary">活动宝贝</button>-->
+                    <!--<button class="btn btn-scondary">有好货宝贝</button>-->
+                </div>
+                <!--<select class="select">-->
+                    <!--<option>全部类目</option>-->
+                    <!--<option>新品上新</option>-->
+                    <!--<option>毛衣</option>-->
+                    <!--<option>休闲裤</option>-->
+                    <!--<option>2019.05.13夏季第7期</option>-->
+                    <!--<option>上衣/TOP</option>-->
+                    <!--<option>半身裙</option>-->
+                    <!--<option>棉衣外套</option>-->
+                <!--</select>-->
+            </div>
+            <input type="text" placeholder="搜索" class="pdl10" placeholder="宝贝名称" [(ngModel)]="queryParams.itemName" (ngModelChange)="query()">
+        </div>
+        <div>
+            <div class="pt10">
+                <table class="table">
+                    <thead>
+                    <tr class="bg-fa">
+                        <th style="width:42px;"></th>
+                        <th>宝贝信息</th>
+                        <th>销量</th>
+                        <th>库存</th>
+                        <th>发布日期</th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="items">
+                    <ng-template ngFor let-item [ngForOf]="items" let-i="index">
+                    <tr>
+                        <td><input type="checkbox"  [(ngModel)]="item.checked"></td>
+                        <td>
+                            <div class="d-flex left-content align-items-center pd1-0">
+                                <div style="width:68px">
+                                    <img class="widthP100" src="{{item.picUrl}}">
+                                </div>
+                                <ul class="pl10">
+                                    <li class="left-imgTitle"><a>{{item.title}}</a></li>
+                                    <li class="color999">价格:<span class="color333 fontW-bold pd6">{{item.price}}</span>元</li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td>{{item.soldQuantity}}</td>
+                        <td>{{item.num}}</td>
+                        <td>{{item.modified}}</td>
+                    </tr>
+                    </ng-template>
+                    <!--<tr>-->
+                        <!--<td><input type="checkbox"></td>-->
+                        <!--<td>-->
+                            <!--<div class="d-flex left-content align-items-center pd1-0">-->
+                                <!--<div style="width:68px">-->
+                                    <!--&lt;!&ndash;<img class="widthP100" src="../../../../content/images/img123.jpg">&ndash;&gt;-->
+                                <!--</div>-->
+                                <!--<ul class="pl10">-->
+                                    <!--<li class="left-imgTitle"><a>新款创意英文字母印花T恤喜欢收藏加购上新3天内7折抢购</a></li>-->
+                                    <!--<li class="color999">价格:<span class="color333 fontW-bold pd6">238</span>元</li>-->
+                                <!--</ul>-->
+                            <!--</div>-->
+                        <!--</td>-->
+                        <!--<td>45213</td>-->
+                        <!--<td>123</td>-->
+                        <!--<td>2019-5-16</td>-->
+                    <!--</tr>-->
+                    </tbody>
+                </table>
+            </div>
+            <cjtj-pagination #pagination [setCount]="filteredItems.length" [setPage]="page" [pageSize]="pageSize" (onPageChange)="pageChange($event)" ></cjtj-pagination>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary mr-2"
+                cjtjConfirmationPopover
+                title="提示"
+                [onBeforePopover]="popoverCheck"
+                message="确定添加推广宝贝吗？"
+                (confirm)="submit()">确定</button>
+        <button class="btn-scondary btn"  (click)="check()">取消</button>
+    </div>
+</div>

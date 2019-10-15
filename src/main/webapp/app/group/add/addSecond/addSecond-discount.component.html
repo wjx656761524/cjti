@@ -1,0 +1,77 @@
+<div class="mb10 fontS16 bg-fa pd16-2">添加溢价资源位<span class="fontS12 ml10 color999">总计<span class="primary-color fontS14 fontW-bold">{{this.locationNum}}</span>个资源位</span></div>
+<div class="pb20 addDiscount min-height">
+    <div class="pd0-2">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    <input type="checkbox"  [(ngModel)]="allSelect" (change)="clickSelectAll()">
+                </th>
+                <th>资源位名称</th>
+                <th>网站属性</th>
+                <th>设备平台</th>
+                <th>日均可竞流量</th>
+                <th>溢价比例</th>
+                <th>建议溢价</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td></td>
+                <td colspan="4">
+                    <div class="mt10 mb10">
+                        <h4>溢价助手<span class="fontS12 color999 ml10">（快速溢价）</span></h4>
+                    </div>
+                </td>
+                <td colspan="2">
+                    <div class="positionR" >
+                        <span class="fontS12 color999 positionA" style="left:-58px;line-height: 32px;">批量溢价</span>
+                        <input type="text"  [(ngModel)]="alldiscount">
+                        <button class="btn btn-scondary" (click)="changAllDiscount()" >应用</button>
+                    </div>
+                </td>
+            </tr>
+            <div *ngIf="locations"></div>
+            <ng-template ngFor let-location [ngForOf]="locations" let-i="index">
+            <tr  >
+
+                <td>
+                    <input type="checkbox"  [(ngModel)]="location.checked" (change)="countNum(location.checked)">
+                </td>
+                <td>{{location.adzoneName}}</td>
+                <td> ---</td>
+                <td> ---</td>
+                <td> ---</td>
+                <td>
+                    <input class="pl10" type="text" value="{{location.discount}}" [disabled]="!location.checked" [(ngModel)]="location.discount" ><span class="ml6">%</span>
+                    <div *ngIf="location.checked&&!(location.discount>=1&&location.discount<=300)"  style="color:red">请填写 1 - 300 之间的整数</div>
+                </td>
+                <td>-%</td>
+
+                <!--<td>-->
+                    <!--<input type="checkbox">-->
+                <!--</td>-->
+                <!--<td> 手机淘宝-淘好物活动</td>-->
+                <!--<td> -&#45;&#45;</td>-->
+                <!--<td> -&#45;&#45;</td>-->
+                <!--<td> -&#45;&#45;</td>-->
+                <!--<td>-->
+                    <!--<input class="pl10" type="text" value="10"><span class="ml6">%</span>-->
+                    <!--<div style="display:none">请填写 1 - 300 之间的整数</div>-->
+                <!--</td>-->
+                <!--<td>-%</td>-->
+            </tr>
+            </ng-template>
+            </tbody>
+        </table>
+    </div>
+    <div class="ml30 mt20 mb10">
+        <button class="btn btn-primary"
+                cjtjConfirmationPopover
+                title="提示"
+                [onBeforePopover]="popoverCheck"
+                message="确定批量修改溢价？"
+                (confirm)="batchUpdateDiscount()">确定</button>
+        <button class="btn btn-scondary ml10" (click)="activeModal.close('Close click')">取消</button>
+    </div>
+</div>

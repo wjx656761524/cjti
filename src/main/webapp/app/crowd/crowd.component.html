@@ -1,0 +1,483 @@
+<div class="content">
+    <div class="content mt20 plan">
+        <div class="bg-fff mt20 pb20">
+            <div>
+                <div *ngIf="show">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a routerLink="/campaign" style="color:#3c7bfc;font-size: 13px;text-decoration : none;vertical-align:middle">所有商品推广计划 <img src="../../content/images/dayuhao.png"> </a>
+                    <span style="vertical-align:middle">计划：</span><a style="vertical-align:middle" routerLink="/group" [queryParams]="{campaignId:queryParams.campaignId,campaignName:camName}">{{camName}}</a><span style="vertical-align:middle" *ngIf="groupName != undefined"><img src="../../content/images/dayuhao.png" >单元：{{groupName}}</span>
+                </div>
+                <div class="d-flex justify-content-between border-b date-title align-items-center">
+                    <ul class="d-flex">
+                        <li *ngIf="campaignShow"><a routerLink="/campaign">计划</a></li>
+                        <li *ngIf="groupShow"><a routerLink="/group" [queryParams]="{campaignId:queryParams.campaignId,campaignName:camName}">单元</a></li>
+                        <li><a routerLink="/crowd"  [queryParams]="{campaignId:queryParams.campaignId,groupId:queryParams.adgroupId,campaignName:camName,groupName:groupName}"style="color:#3c7bfc">定向</a></li>
+                        <li><a routerLink="/location" [queryParams]="{campaignId:queryParams.campaignId,groupId:queryParams.adgroupId,campaignName:camName,groupName:groupName}">资源位</a></li>
+                        <li><a routerLink="/creative" [queryParams]="{campaignId:queryParams.campaignId,groupId:queryParams.adgroupId,campaignName:camName,groupName:groupName}">创意</a></li>
+                    </ul>
+                    <div class="mr20 d-flex align-items-center">
+                        <cjtj-report-date-select (onSelectChange)="onDateSelectChange($event)"></cjtj-report-date-select>
+                        <input type="text" placeholder="搜索" class="pdl10" [(ngModel)]="queryParamss.adgroupName" (ngModelChange)="query()">
+                        <cjtj-report-columns-select business="adgroup" (onSelectChange)="onColumnsSelectChange($event)"></cjtj-report-columns-select>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex justify-content-between plan-btn">
+                        <div class="d-flex align-items-center">
+                            <button  type="button" class="btn-primary btn mr10" (click)="openTemplate(addCrowdTemplate)">新增定向</button>
+                            <a><button class="btn-scondary btn mr10"
+                                       aria-hidden="true"
+                                       cjtjConfirmationPopover
+                                       title="提示框"
+                                       [isHidePopover]="isDelete"
+                                       [contentTemplate]="deleteTemplate"
+                                       (onPopover)="openDelete()"
+                                       (confirm)="batchDelete()"
+                                       >批量移除</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mlrP1">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" [(ngModel)]="allSelect" (change)="selcetedChange(true)">
+                        </th>
+                        <th>状态</th>
+                        <th>定向信息</th>
+                        <th>出价</th>
+                        <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                            <th *ngIf="selectColumns.indexOf(reportField.field) >= 0" class="text-xl-center">
+                                {{reportField.title}}
+                            </th>
+                        </ng-template>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let data of units; let i=index">
+                        <td>
+                            <input type="checkbox" [(ngModel)]="data.checked" (change)="selcetedChange(false, data.checked)">
+                        </td>
+                        <td>
+                            <div class="putInstatus">
+                                <div class="putInshow">
+                                    <img class="widthP100" src="../../content/images/open.png" *ngIf="data.info.status === 'start'">
+                                    <img class="widthP100" src="../../content/images/stop.png" *ngIf="data.info.status === 'pause'">
+                                </div>
+                                <ul class="putInstatus-list">
+                                    <li class="d-flex align-items-center pd10" (click)="updateStart(data.info)">
+                                        <div>
+                                            <img src="../../content/images/open.png">
+                                        </div>
+                                        <span class="ml6">正在投放</span>
+                                        <i class="ml20" *ngIf="data.info.status === 'start'"><img src="../../content/images/ok.png"></i>
+                                    </li>
+                                    <li class="d-flex align-items-center pd10" (click)="updatePausr(data.info)">
+                                        <div>
+                                            <img src="../../content/images/stop.png">
+                                        </div>
+                                        <span class="ml6">暂停投放</span>
+                                        <i class="ml20" *ngIf="data.info.status === 'pause'"><img src="../../content/images/ok.png"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="left-content pd1-0 lineHeight20">
+                                <h6 class="mb6">{{data.info.crowdName}}</h6>
+                                <ul class="color999">
+                                    <li>计划:<a class="color-h-brand">{{data.info.campaignName}}</a></li>
+                                    <li class="left-imgTitle">单元:<a class="color-h-brand">{{data.info.adgroupName}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+
+
+                        <td>{{data.info.price/100}}<i class="fa fa-pencil hover-show ml-1"
+                                                  aria-hidden="true"
+                                                  cjtjConfirmationPopover
+                                                  title="出价"
+                                                  [isHidePopover]="isBudgetHidePopover"
+                                                  [contentTemplate]="editBudgetTemplate"
+                                                  (onPopover)="openEditBudget(data.info.price)"
+                                                  (confirm)="submitBudget(data.info)"
+                        ><img src="../../content/images/icon-pencil.png"></i></td>
+
+
+
+                        <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                            <td class="text-xl-center" *ngIf="selectColumns.indexOf(reportField.field) >= 0">{{data.report? reportField.isLZY? (data.report[reportField.field] | fzy) :data.report[reportField.field] : 0 }}</td>
+                        </ng-template>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-2">
+                <cjtj-pagination #pagination [setCount]="filteredUnits.length" [setPage]="page" [pageSize]="pageSize" (onPageChange)="pageChange($event)" ></cjtj-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #editBudgetTemplate>
+    <div class="batch_modify_keyword_price d-flex mt-2">
+        <div class="mb-1">出价：</div>
+        <div class="total-change ml-1 mb-2">
+            <div class="select-sm" >
+                <label>
+                    <input class="border-c width-4 height1d6 mr-1 pl-1"  [(ngModel)]="editBudget">元
+                </label>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #deleteTemplate>
+    <div class="batch_modify_keyword_price d-flex mt-2">
+        <div class="total-change ml-1 mb-2">
+            <div class="select-sm" >
+                <label>
+                    是否删除!
+                </label>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #addCrowdTemplate>
+    <div class="bg-fff mlr10-auto" >
+        <!-- 新建定向弹窗第一步   单元-->
+
+        <div *ngIf="pages === 'danyuan'">
+
+        <div class="fontS16 bg-fa pd16-2 modal-header">选择添加单元<span class="fontS12 ml10 color999">有效自定义计划的单元</span>
+
+            <button type="button" class="close" aria-label="Close" (click)="addCrowdModal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="pd20 modal-body min-height">
+            <input type="text" placeholder="搜索" class="pdl10 ml10">
+            <div class="ml20" *ngFor="let item of CampaignGroup.info">
+                <div class="mb10 mt10">{{item.campaign.campaignName}}</div>
+                <div class="ml10">
+                    <div class="mb10" *ngFor="let data of item.groupStatusList">
+                        <label>
+                            <input type="radio" name="name" [checked] = "addCrowdParams.adgroupId == data.groupId"  (click)="ModifyProgram(item.campaign.campaignId,data.groupId,data.groupName,item.campaign.campaignName,data.itemId)"> {{data.groupName}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+        <!-- 新建定向弹窗第二步  定向类型-->
+        <div *ngIf="pages === 'leixing'">
+            <div class="mb10 fontS16 bg-fa pd16-2">请选择一个定向类型</div>
+            <div class="pd20 min-height">
+                <div class="d-flex align-items-center choose-crowd-list">
+                    <div class="pd10 ml10 border-c border-r3" style="cursor: pointer;" (click)="determine(1)">
+                        智能定向 <img src="../../content/images/ok.png" *ngIf="dh == 1">
+                    </div>
+                    <div class="pd10 ml10 border-c border-r3" style="cursor: pointer;" (click)="determine(2)">
+                        拉新定向-店铺 <img src="../../content/images/ok.png" *ngIf="dh == 2">
+                    </div>
+                    <div class="pd10 ml10 border-c border-r3" style="cursor: pointer;" (click)="determine(3)">
+                        拉新定向-宝贝 <img src="../../content/images/ok.png" *ngIf="dh == 3">
+                    </div>
+                    <div class="pd10 ml10 border-c border-r3" style="cursor: pointer;" (click)="determine(4)">
+                        拉新定向-关键词 <img src="../../content/images/ok.png" *ngIf="dh == 4">
+                    </div>
+                </div>
+                <div class="d-flex pt-4 choose-crowd-list">
+                    <div class="pd10 ml10 border-c border-r3" style="cursor: pointer;" (click)="determine(5)">
+                        重定向-店铺 <img src="../../content/images/ok.png" *ngIf="dh == 5">
+                    </div>
+                    <div class="pd10 ml10 border-c border-r3" style="cursor: pointer;" (click)="determine(6)">
+                        重定向-宝贝 <img src="../../content/images/ok.png" *ngIf="dh == 6">
+                    </div>
+                    <div class="pd10 ml10 border-c border-r3" style="cursor: pointer;" (click)="determine(7)">
+                        达摩盘平台精选 <img src="../../content/images/ok.png" *ngIf="dh == 7">
+                    </div>
+                    <div class="pd10 ml10 border-c border-r3" style="cursor: pointer;"(click)="determine(8)">
+                        达摩盘 <img src="../../content/images/ok.png" *ngIf="dh == 8">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 智能定向 -->
+        <div *ngIf="lxxx === 1">
+            <div class="fontS16 bg-fa pd16-2">智能定向</div>
+            <div class="pd20 min-height">
+                <div *ngFor="let data of zndx[0].options">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-4">{{data.optionName}}</div>
+                        <div class="d-flex align-items-center">
+                            <div class="color999 mr-2">系统根据您的访客属性、宝贝标题、宝贝属性等维度，智能匹配出适合该宝贝的人群</div>
+                            <cjtj-slide-toggle (valueChange)="onChanges($event,517,'ITEM_RECOMMEND',zndx[0])" [value]="judgeZndx" ></cjtj-slide-toggle>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 拉新定向-店铺 -->
+        <div *ngIf="lxxx === 2">
+            <div class="fontS16 bg-fa pd16-2">拉新定向-店铺</div>
+            <div class="pd20 min-height">
+                <div *ngFor="let data of lxdxdp[0].options" class="d-flex align-items-baseline mr-3">
+                    <div>{{data.optionName}}</div>
+                    <div class="d-flex align-items-center ml-4">
+                        <div class="mr-2 color999">
+                            近期对相似店铺有浏览、搜索、收藏、加购物车、购买等行为的人群
+                        </div>
+                        <cjtj-slide-toggle (valueChange)="onChanges($event,519,'LOOK_LIKE_SHOP',lxdxdp[0])" [value]="judgeLxdxDp"></cjtj-slide-toggle>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 新建定向弹窗第三步-- 拉新定向-宝贝 -->
+        <div *ngIf="lxxx === 3">
+            <div class="fontS16 bg-fa pd16-2">拉新定向-宝贝</div>
+            <div class="pd20 min-height">
+                <div class="d-flex align-items-baseline">
+                    <div>{{lxdxbb[0].labelName}}</div>
+                    <div class="d-flex align-items-center ml-4">
+                        <div class="mr-2 color999">喜欢相似宝贝的人群</div>
+                        <cjtj-slide-toggle (valueChange)="onLxdxbb($event,521,'LOOK_LIKE_ITEM',lxdxbb[0])" [value]="judgeLxdxBB"></cjtj-slide-toggle>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 拉新定向- 关键词 -->
+        <div *ngIf="lxxx === 4">
+            <div class="fontS16 bg-fa pd16-2">拉新定向-关键词</div>
+            <div class="pd20 min-height">
+                <div class="border-b pl10 pb10">
+                    购物意图定向<span>（{{num}}/20）</span>
+                </div>
+                <div class="d-flex justify-content-between mt10">
+                    <div style="width:48%">
+                        <table class="table" style="border:1px solid #eee">
+                            <thead>
+                            <tr>
+                                <th>标签</th>
+                                <th style="width: 66px;"></th>
+                            </tr>
+                            </thead>
+                            <tbody style="display: block;height: 500px;width:379px;overflow-y: scroll;">
+                            <tr *ngFor="let data of lxdx[0].options">
+                                <td>{{data.optionName}}</td>
+                                <td><a (click)="addgjc(data)">添加&gt;&gt;</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="width:48%">
+                        <table class="table" style="border:1px solid #eee">
+                            <thead>
+                            <tr>
+                                <th>标签</th>
+                                <!--<th><a>全部移除</a></th>-->
+                            </tr>
+                            </thead>
+                            <tbody style="display: block;height: 500px;width:375px;overflow-y: scroll;">
+                            <tr *ngFor="let data of addgjcs">
+                                <td>{{data.optionName}}</td>
+                                <td><a (click)="deletegjc(data)">&lt;&lt;移除</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 重定向-店铺 -->
+        <div *ngIf="lxxx === 5">
+            <div class="fontS16 bg-fa pd16-2">重定向-店铺</div>
+            <div class="pd20 min-height">
+                <div *ngFor="let data of cdxdpxx[0].options" class="d-flex align-items-baseline">
+                    <div>{{data.optionName}}</div>
+                    <div class="d-flex align-items-center">
+                        <div>近期及实时对本店铺有浏览、搜索、收藏、加购物车、购买等行为的人群</div>
+                        <cjtj-slide-toggle (valueChange)="onChanges($event,518,'LIKE_MY_SHOP',cdxdpxx[0])" [value]="judgeDp1"></cjtj-slide-toggle>
+                    </div>
+                </div>
+                <div *ngFor="let data of cdxdpsc[0].options">
+                    <span>{{data.optionName}}</span>
+                    <span>近期及实时对本店铺宝贝有收藏、加购物车等行为的人群</span>
+                    <cjtj-slide-toggle (valueChange)="onChanges($event,522,'SHOP_BEHAVIOR',cdxdpsc[0])" [value]="judgeDp2"></cjtj-slide-toggle>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 重定向-宝贝 -->
+        <div *ngIf="lxxx === 6">
+            <div class="fontS16 bg-fa pd16-2">重定向-宝贝<span class="fontS12 ml10 color999">喜欢我的宝贝的人群</span></div>
+            <div class="pd20 min-height">
+                <div class="pl10 mb20">
+                    <input type="text" placeholder="搜索" class="pdl10" [(ngModel)]="queryCdxbb.optionName" (ngModelChange)="queryCdxBb()">
+                    <span class="color999">已选个数: </span><span class="color333">{{cdxbbCount}}/5</span>
+                </div>
+                <div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>宝贝信息</th>
+                            <!--<th>推荐指数</th>-->
+                            <!--<th>人群数量</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let data of CdxbbUnits">
+                            <td>
+                                <input type="checkbox" (change)="selectCheckbox($event.target.checked,data)" >
+                            </td>
+                            <td>
+                                <div style="width:68px;display: inline-block">
+                                    <img class="widthP100" src="{{data.imgUrl}}">
+                                </div>
+                                <span>{{data.title}}</span>
+                            </td>
+                            <!--<td> ---</td>-->
+                            <!--<td> 1,836,836</td>-->
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <cjtj-pagination #pagination [setCount]="cdxbb.length" [setPage]="page" [pageSize]="pageSize" (onPageChange)="pageChangecdxbb($event)" ></cjtj-pagination>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <!-- 达摩盘平台精选 -->
+        <div *ngIf="lxxx === 7 ">
+            <div class="mb10 fontS16 bg-fa pd16-2">达摩盘平台精选<span class="fontS12 ml10 color999"></span></div>
+            <div class="pb20 min-height">
+                <div class="pl10">
+                    <input type="text" placeholder="搜索" class="pdl10" style="margin:10px;" [(ngModel)]="queryDmp.optionName" (ngModelChange)="queryDmpjx()">
+                    <span class="color999">已选个数：</span><span class="color333">{{dmpjxCount}}/8</span>
+                </div>
+                <div class="pd0-2">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>人群名称</th>
+                            <th>人群描述</th>
+                            <!--<th>人群相关度</th>-->
+                            <!--<th>全网人群数量</th>-->
+                            <!--<th>初次同步时间</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let data of DmpjxUnits">
+                            <td>
+                                <input type="checkbox" (change)="selectCheckbox($event.target.checked,data)">
+                            </td>
+                            <td> {{data.optionName}}</td>
+                            <td> {{data.optionDesc}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <cjtj-pagination #pagination [setCount]="dmpjx[0].options.length" [setPage]="page" [pageSize]="pageSize" (onPageChange)="pageChangedmpjx($event)" ></cjtj-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 达摩盘 -->
+        <div *ngIf="lxxx === 8 ">
+            <div class="mb10 fontS16 bg-fa pd16-2">达摩盘123<span class="fontS12 ml10 color999"></span></div>
+            <div class="pb20 min-height">
+                <div class="pl10">
+                    <input type="text" placeholder="搜索" class="pdl10" style="margin:10px;">
+                    <span class="color999">已选个数：</span><span class="color333">1/8</span>
+                </div>
+                <div class="pd0-2">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>人群名称</th>
+                            <th>人群描述</th>
+                            <!--<th>人群相关度</th>-->
+                            <!--<th>全网人群数量</th>-->
+                            <!--<th>初次同步时间</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let data of dmp[0]">
+                            <td>
+                                <input type="checkbox" (change)="selectCheckbox($event.target.checked,data)">
+                            </td>
+                            <td> {{data.targetType}}</td>
+                            <td> {{data.labelValue}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 批量出价 -->
+        <div *ngIf="pages === 'chujia'">
+            <div class="fontS16 bg-fa pd16-2">批量出价</div>
+            <div class="pd20 min-height">
+                <div>
+                    <span class="fontS16">出价助手</span>
+                    <span class="color999">（帮您快速完成出价）</span>
+                    <select class="select">
+                        <option> 批量修改至</option>
+                    </select>
+                    <input type="text" [(ngModel)]="batchOffer">
+                    <button class="btn btn-scondary" (click)="batchOffers();">应用</button>
+                </div>
+                <div class="ml10 mt10">
+                    <div class="color999 d-flex align-items-center justify-content-between mb10 mr10">
+                        <div>
+                            <input type="checkbox" checked>
+                            <span class="mb10 mt10"> 所属计划：{{campaignName}}</span>
+                        </div>
+                        <span>所属单元：{{adgroupName}}</span>
+                    </div>
+                    <div class="ml20 mr10">
+                          <div *ngFor="let date of Parameter" class="mb10 d-flex align-items-center justify-content-between">
+                               <label><input type="checkbox" [checked]="date.checked"  [(ngModel)]="date.checked"> {{date.optionName}}</label>
+                               <div class="">
+                                    <span class="mr10">出价</span>
+                                    <input type="text" [(ngModel)]="date.price" [value]="amounts">
+                               </div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="ml30 mb30">
+            <button class="btn btn-primary" *ngIf="pages === 'chujia'" (click)="saveCrowd()">确定</button>
+            <button class="btn btn-primary" (click)="next()" *ngIf="pages != 'chujia'">下一步</button>
+            <button class="btn btn-scondary ml10" (click)=" previous()" *ngIf="pages != 'danyuan' ">返回上一步</button>
+            <button class="btn btn-scondary ml10" (click)="addCrowdModal.dismiss('Cross click')">取消</button><span>{{msg}}</span>
+        </div>
+    </div>
+
+</ng-template>

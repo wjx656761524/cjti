@@ -1,0 +1,114 @@
+<div class="content">
+    <div class="content mt20">
+        <div class="bg-fff mt20 pb20">
+            <div class="single-historyDate">
+                <div class="d-flex justify-content-between border-b date-title align-items-center">
+                    <ul class="d-flex nav nav-tabs pb10" id="myTab">
+                        <li><a href="#singleDate" class="primary-color" data-toggle="tab">单日投放数据</a></li>
+                        <li><a routerLink="/homeH" data-toggle="tab">历史投放数据</a></li>
+                    </ul>
+                    <div class="mr20 d-flex align-items-center">
+<!--                        <select class="select">-->
+<!--                            <Label>商品推广</Label>-->
+<!--                            <Label>账户整体</Label>-->
+<!--                        </select>-->
+                        <div class="ml10">
+                            <span style="float: left;padding-top: 5px;">日期对比：</span>
+                            <!--<input type="datetime" class="mr6">比<input type="datetime" class="ml6">-->
+                            <div style="float: left">
+                                <cjtj-report-date-select (onSelectChange)="onDateSelectChange($event)"></cjtj-report-date-select>
+                            </div>
+                        </div>
+<!--                        <div><button class="btn btn-scondary ml10">更多数据</button></div>-->
+<!--                        <div></div>-->
+                    </div>
+                </div>
+
+                <div id="myTabContent" class="tab-content">
+                    <div class="active" id="singleDate">
+                        <div class="detail-date mlrP2">
+                            <ul class="d-flex justify-content-between">
+                                <li>
+                                    <div>账户余额</div>
+                                    <div><span style="color:#ff8400">{{blance? blance : '0'}}</span></div>
+                                    <div class="acountDetail-h">
+<!--                                        <button class="btn btn-primary">充值</button>-->
+                                        <a target="_blank" href="https://tuijian.taobao.com/indexbp.html?spm=a2et4.11816922.88888888.d60a03e63.6daf1f5651VLKl#!/account/index" class="btn btn-scondary">账户明细</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>消耗（元）</div>
+                                    <div>{{chargeOne}}</div>
+                                    <div>{{chargeTwo}}</div>
+                                </li>
+                                <li>
+                                    <div class="color777">展现量</div>
+                                    <div>{{adPvOne}}</div>
+                                    <div>{{adPvTwo}}</div>
+                                </li>
+                                <li>
+                                    <div class="color777">点击量</div>
+                                    <div>{{clickOne}}</div>
+                                    <div>{{clickTwo}}</div>
+                                </li>
+                                <li>
+                                    <div class="color777">千次展现成本（元）</div>
+                                    <div>{{ecpmOne}}</div>
+                                    <div>{{ecpmTwo}}</div>
+                                </li>
+                                <li>
+                                    <div class="color777">点击率</div>
+                                    <div>{{ctrOne}}</div>
+                                    <div>{{ctrTwo}}</div>
+                                </li>
+                                <li>
+                                    <div class="color777">点击成本（元）</div>
+                                    <div>{{ecpcOne}}</div>
+                                    <div>{{ecpcTwo}}</div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div style="padding:20px;">
+                            <select class="select" [(ngModel)]="dataContrast" >
+                                <option  value="charge">消耗</option>
+                                <option  value="adPv">展现量</option>
+                                <option  value="click">点击量</option>
+                                <option  value="ecpm">千次展现成本</option>
+                                <option  value="ctr">点击率</option>
+                                <option  value="ecpc">点击成本</option>
+                            </select>
+                            <cjtj-report-chart-home [rptdailyOne]="rptdailyOne" [rptdailyTwo]="rptdailyTwo" [dataContrast]="dataContrast"></cjtj-report-chart-home>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+        <div class="bg-fff mt20 pb20">
+            <div>
+                <div class="d-flex justify-content-between border-b date-title align-items-center">
+                    <ul class="d-flex pt10 pb10">
+                        <li class="primary-color">日常投放场景</li>
+                        <li>活动投放场景</li>
+                        <li><a href="#"  (click)="addCampaign();">新建计划</a></li>
+                    </ul>
+
+                </div>
+                <div class="d-flex">
+                    <div class="pd20 widthP20">
+                        <img class="w-100" src="../../content/images/changjing01-2.png">
+                    </div>
+                    <div class="pd20 widthP20">
+                        <img class="w-100" src="../../content/images/changjing01-2.png">
+                    </div>
+                    <div class="pd20 widthP20">
+                        <img class="w-100" src="../../content/images/changjing01-2.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

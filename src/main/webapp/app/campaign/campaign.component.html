@@ -1,0 +1,230 @@
+<div class="content">
+    <div class="content mt20 plan">
+        <div class="bg-fff mt20 pb20">
+            <div>
+                <div class="d-flex justify-content-between border-b date-title align-items-center">
+                    <ul class="d-flex">
+                        <li><a routerLink="/campaign" style="color:#3c7bfc">计划</a></li>
+                        <li><a routerLink="/group">单元</a></li>
+                        <li><a routerLink="/crowd">定向</a></li>
+                        <li><a routerLink="/location">资源位</a></li>
+                        <li><a routerLink="/creative">创意</a></li>
+                    </ul>
+                    <div class="mr20 d-flex align-items-center">
+                        <cjtj-report-date-select (onSelectChange)="onDateSelectChange($event)"></cjtj-report-date-select>
+                        <input type="text" placeholder="搜索" class="pdl10" [(ngModel)]="queryParams.campaignName" (ngModelChange)="query()">
+                        <!--                        <div><button class="btn btn-scondary ml10">更多数据</button></div>-->
+                        <cjtj-report-columns-select business="adcampaign" (onSelectChange)="onColumnsSelectChange($event)"></cjtj-report-columns-select>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex justify-content-between plan-btn">
+                        <div class="d-flex align-items-center">
+                            <button class="btn-primary btn mr10"(click)="addCampaign()">新增推广计划</button>
+                            <button class="btn-scondary btn mr10"
+                                    cjtjConfirmationPopover
+                                    title="批量设置状态"
+                                    [contentTemplate]="batchUpdateStatus"
+                                    [isHidePopover]="getPopover"
+                                    (onPopover)="GetPopover()"
+                                    (confirm)="bitBudget()"
+                                   >批量修改</button>
+                            <a><button class="btn-scondary btn mr10"
+                                       cjtjConfirmationPopover
+                                       title="批量设置日预算"
+                                       [contentTemplate]="batchUpdateDayBudget"
+                                       [isHidePopover]="Popover"
+                                       (onPopover)="allpovers()"
+                                       (confirm)="dayBudgetdayBudget()">批量设置日预算</button></a>
+                            <!--<a><button class="btn-scondary btn mr10">批量设置</button></a>-->
+                            <select class="select" (change)="statusChange($event)">
+                                <option value="all">全部状态</option>
+                                <option value="valid">有效状态</option>
+                                <option value="start">正在投放</option>
+                                <option value="wait">等待投放</option>
+                                <option value="pause">暂停投放</option>
+                                <option value="erminate">结束投放</option>
+                                <option value="abnormal">投放故障</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mlrP1">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox"[(ngModel)]="allSelect" (change)="clickSelectAll()">
+                        </th>
+                        <th>状态</th>
+                        <th>计划信息</th>
+                        <th>投放时间</th>
+                        <th>日预算</th>
+                        <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                            <th *ngIf="selectColumns.indexOf(reportField.field) >= 0">
+                            <span>
+                                {{reportField.title}}
+                                <i *ngIf="reportField.tooltip && reportField.tooltip != ''" class="fa fa-question-circle" aria-hidden="true" [ngbTooltip]="reportField.tooltip"></i>
+                            </span>
+                            </th>
+                        </ng-template>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="pageCampaigns">
+                    <ng-template ngFor let-campaign [ngForOf]="pageCampaigns" let-i="index">
+                        <tr>
+                            <td>
+                                <input type="checkbox"  [checked]="campaign.checked"  (change)="clickSelect(campaign)">
+                            </td>
+                            <td>
+                                <div class="putInstatus">
+                                    <div class="putInshow">
+                                        <img *ngIf="campaign.info.status === 'start'" class="widthP100" src="../../content/images/open.png">
+                                        <img *ngIf="campaign.info.status === 'pause'" class="widthP100" src="../../content/images/stop.png">
+                                        <img *ngIf="campaign.info.status === 'terminate'" class="widthP100" src="../../content/images/delete.png">
+                                    </div>
+                                    <div class="box">
+                                        <ul  *ngIf="campaign.info.status!='terminate'" class="putInstatus-list">
+                                            <li class="d-flex align-items-center pd10" (click)="updateChangeStatus(campaign,'start')">
+                                                <div >
+                                                    <img src="../../content/images/open.png">
+                                                </div>
+                                                <span class="ml6">正在投放</span>
+                                                <i class="ml20"><img  *ngIf="campaign.info.status === 'start'" src="../../content/images/ok.png"></i>
+                                            </li>
+                                            <li class="d-flex align-items-center pd10" (click)="updateChangeStatus(campaign,'pause')">
+                                                <div >
+                                                    <img src="../../content/images/stop.png">
+                                                </div>
+                                                <span class="ml6">暂停投放</span>
+                                                <i class="ml20"><img *ngIf="campaign.info.status === 'pause'" src="../../content/images/ok.png"></i>
+                                            </li>
+                                            <li  class="d-flex align-items-center pd10"
+                                                 cjtjConfirmationPopover
+                                                 title="提示"
+                                                 message="是否确认终止单元？单元终止后将自动投放结束，无法进行编辑？"
+                                                 (confirm)="updateChangeStatus(campaign,'terminate')">
+                                                <div >
+                                                    <img src="../../content/images/delete.png">
+                                                </div>
+                                                <span class="ml6">结束投放</span>
+                                                <i class="ml20">
+                                                    <img *ngIf="campaign.info.status === 'terminate'" src="../../content/images/ok.png">
+                                                </i>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <a class="ml6 color333" routerLink="/group" [queryParams]="{campaignId:campaign.info.campaignId,campaignName:campaign.info.campaignName}">
+                                    {{campaign.info.campaignName}}
+                                </a>
+                                    <i  class="ml6"
+                                        class="fa fa-pencil hover-show ml-1"
+                                        aria-hidden="true"
+                                        cjtjConfirmationPopover
+                                        title="修改信息"
+                                        [isHidePopover]="BudgetHidePopover"
+                                        [contentTemplate]="itBudgetTemplate"
+                                        (onPopover)="EditBudget(campaign.info.campaignName)"
+                                        (confirm)="bitBudget()">
+
+                                        <img src="../../content/images/icon-pencil.png">
+                                    </i>
+
+
+                                <div class="mt6">
+                                    <span *ngIf="campaign.info.launchForever == true" class="hollow-icon">智能投放</span>
+                                    <span *ngIf="campaign.info.launchForever == false" class="hollow-icon ml10">标准投放</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div>起：<span>{{campaign.info.beginTime | date:'yyyy-MM-dd' }}</span></div>
+                                <div>止：<span>{{campaign.info.endTime | date:'yyyy-MM-dd' }}</span></div>
+                            </td>
+                            <td>{{campaign.info.dayBudget | fzy}}<i class="ml6"
+                                                                    class="fa fa-pencil hover-show ml-1"
+                                                                    aria-hidden="true"
+                                                                    cjtjConfirmationPopover
+                                                                    title="出价"
+                                                                    [isHidePopover]="isBudgetHidePopover"
+                                                                    [contentTemplate]="editBudgetTemplate"
+                                                                    (onPopover)="openEditBudget(campaign.info.dayBudget)"
+                                                                    (confirm)="submitBudget(campaign.info)">
+
+                                <img src="../../content/images/icon-pencil.png"></i></td>
+                            <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                                <td *ngIf="selectColumns.indexOf(reportField.field) >= 0">{{campaign.report? campaign.report[reportField.field]? campaign.report[reportField.field] : 0  : 0 }}</td>
+                            </ng-template>
+                        </tr>
+                    </ng-template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 page">
+        <cjtj-pagination #pagination [setCount]="this.filteredCampaigns?.length" [setPage]="page" [pageSize]="pageSize" (onPageChange)="pageChange($event)" ></cjtj-pagination>
+    </div>
+
+
+    <ng-template #editBudgetTemplate>
+        <div class="batch_modify_keyword_price d-flex mt-2">
+            <div class="mb-1">出价：</div>
+            <div class="total-change ml-1 mb-2">
+                <div class="select-sm" >
+                    <label>
+                        <input class="border-c width-4 height1d6 mr-1"  [(ngModel)]="editBudget">元
+                    </label>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #itBudgetTemplate>
+        <div class="batch_modify_keyword_price d-flex mt-2">
+            <div class="mb-1">修改信息：</div>
+            <div class="total-change ml-1 mb-2">
+                <div class="select-sm" >
+                    <label>
+                        <input class="border-c width-4 height1d6 mr-1"  [(ngModel)]="itBudget">
+                    </label>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #batchUpdateStatus>
+        <div class="batch_modify_keyword_price d-flex mt-2">
+            <div class="total-change ml-1 mb-2">
+                <div class="select-sm" >
+                    <label>
+                        <td>
+                            <input type="radio" value="start" name="aa" (click)="dayBudget('start')" > 批量投放
+                            <input type="radio" value="pause" name="aa" (click)="dayBudget('pause')" > 批量暂停
+                            <input type="radio" value="terminate" name="aa" (click)="dayBudget('terminate')"> 批量停止
+                        </td>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #batchUpdateDayBudget>
+        <div class="batch_modify_keyword_price d-flex mt-2">
+            <div class="mb-1">出价：</div>
+            <div class="total-change ml-1 mb-2">
+                <div class="select-sm" >
+                    <label>
+                        <input class="border-c width-4 height1d6 mr-1" (ngModelChange)="ddget($event);"  [(ngModel)]="budget">元
+                    </label>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+
+</div>
+

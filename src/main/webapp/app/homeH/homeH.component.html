@@ -1,0 +1,96 @@
+<div class="content">
+
+    <div class="content mt20">
+        <div class="bg-fff mt20 pb20">
+            <div class="single-historyDate">
+                <div class="d-flex justify-content-between border-b date-title align-items-center">
+                    <ul class="d-flex nav nav-tabs pb10" id="myTab">
+                        <li><a href="#" data-toggle="tab">单日投放数据</a></li>
+                        <li><a routerLink="/homeH" data-toggle="tab" class="primary-color">历史投放数据</a></li>
+                    </ul>
+
+                    <div class="mr20 d-flex align-items-center">
+<!--                        <select class="select">-->
+<!--                            <Label>商品推广</Label>-->
+<!--                            <Label>账户整体</Label>-->
+<!--                        </select>-->
+                        <div class="ml10">
+                            <cjtj-report-date-select (onSelectChange)="onDateSelectChange($event)" [fromDate]="startTime" [toDate]="endTime"></cjtj-report-date-select>
+                        </div>
+<!--                        <div><button class="btn btn-scondary ml10">更多数据</button></div>-->
+<!--                        <div></div>-->
+                    </div>
+                </div>
+                <div id="myTabContent" class="tab-content">
+                    <div class="detail-date mlrP2">
+                        <ul class="d-flex justify-content-between">
+                            <li>
+                                <div>消耗（元）</div>
+                                <div>{{charge}}</div>
+                            </li>
+                            <li>
+                                <div class="color777">展现量</div>
+                                <div>{{adPv}}</div>
+                            </li>
+                            <li>
+                                <div class="color777">点击量</div>
+                                <div>{{click}}</div>
+                            </li>
+                            <li>
+                                <div class="color777">千次展现成本（元）</div>
+                                <div>{{ecpm}}</div>
+                            </li>
+                            <li>
+                                <div class="color777">点击率</div>
+                                <div>{{ctr}}%</div>
+                            </li>
+                            <li>
+                                <div class="color777">点击成本（元）</div>
+                                <div>{{ecpc}}</div>
+                            </li>
+                            <li>
+                                <div class="color777">收藏宝贝量</div>
+                                <div>{{inshopItemColNum}}</div>
+                            </li>
+                            <li>
+                                <div class="color777">添加购物车量</div>
+                                <div>{{cartNum}}</div>
+                            </li>
+                            <li>
+                                <div class="color777">投资回报率</div>
+                                <div>{{roi}}</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="padding:20px;">
+                        <cjtj-report-chart [rptdaily]="rptdaily"></cjtj-report-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-fff mt20 pb20">
+            <div>
+                <div class="d-flex justify-content-between border-b date-title align-items-center">
+                    <ul class="d-flex pt10">
+                        <li class="primary-color">日常投放场景</li>
+                        <li>活动投放场景</li>
+                        <li><a href="#" (click)="addCampaign();">新建计划</a></li>
+                    </ul>
+
+                </div>
+                <div class="d-flex">
+                    <div style="padding:20px;width: 20%;">
+                        <img style="width:100%" src="../../content/images/changjing01-2.png">
+                    </div>
+                    <div style="padding:20px;width: 20%;">
+                        <img style="width:100%" src="../../content/images/changjing01-2.png">
+                    </div>
+                    <div style="padding:20px;width: 20%;">
+                        <img style="width:100%" src="../../content/images/changjing01-2.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

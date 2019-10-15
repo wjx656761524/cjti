@@ -1,0 +1,10 @@
+<div class="modal-header">
+    <h5 class="modal-title">趋势图</h5>
+    <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="activeModal.dismiss('closed')"><span aria-hidden="true">x</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="report-chart-content">
+        <cjtj-report-chart [reports]="reports"></cjtj-report-chart>
+    </div>
+</div>

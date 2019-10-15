@@ -1,0 +1,3 @@
+<cjti-add-selcampaign *ngIf="showSelCampaignPage" (onShowPage)="onShowPage($event)" [activeModal]="activeModal" ></cjti-add-selcampaign>
+<cjtj-addSecond-mainGroup *ngIf="showAddSecondmainGroupPage"  [activeModal]="activeModal" (onShowPage)="onShowPage($event)" (onSuccess)="onAddLocationSuccess($event)"></cjtj-addSecond-mainGroup>
+<cjti-addThree-creative *ngIf="showAddThreemainGroupPage" (onShowPage)="onShowPage($event)" [activeModal]="activeModal"></cjti-addThree-creative>

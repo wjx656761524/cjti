@@ -1,0 +1,8 @@
+<div class="row mr-0">
+    <div class="col d-flex justify-content-end align-items-baseline">
+        <span>显示 {{start+1}} - {{end}} 条，共 {{count}} 条</span>
+        <div class="ml-3">
+            <ngb-pagination [collectionSize]="count" [pageSize]="pageSize" [(page)]="page" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="showPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

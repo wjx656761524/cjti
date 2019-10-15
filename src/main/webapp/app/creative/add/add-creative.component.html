@@ -1,0 +1,68 @@
+<!-- 新建资源位 -->
+
+<div class="fontS16 bg-fa pd16-2">选择添加单元<span class="fontS12 ml10 color999">有效自定义计划的单元</span></div>
+<div class="pd20">
+    <input type="text" placeholder="搜索" class="pdl10 ml10" [(ngModel)]="queryParams.campaignName" (ngModelChange)="query()">
+    <div class="ml10"  *ngIf="allCampaigns">
+        <ng-template ngFor let-campaign [ngForOf]="filteredCampaigns" let-i="index">
+            <div class="mb10 mt10">计划：{{campaign.campaignName}}</div>
+            <div class="ml20" *ngIf="campaign.adgroups">
+                <ng-template ngFor let-group [ngForOf]="campaign.adgroups" let-i="index">
+                    <div class="mb10">
+                        <label>
+                            <input type="radio" name="xianshen" [value]="group.info.groupId" [(ngModel)]="engineCreative.groupId" (click)="edit(group)"> 单元：{{group.info.groupName}}
+                        </label>
+                    </div>
+                </ng-template>
+            </div>
+
+        </ng-template>
+    </div>
+
+
+
+    <!--<div class="ml10">-->
+    <!--<div class="mb10 mt10">计划：超级推荐_预热拉新_20190509_150833</div>-->
+    <!--<div class="ml20">-->
+    <!--<div class="mb10">-->
+    <!--<label>-->
+    <!--<input type="radio"> 单元：宽松古着感少女cec短袖港味心机t恤女夏装小众2019新款学生上-->
+    <!--</label>-->
+    <!--</div>-->
+    <!--<div class="mb10">-->
+    <!--<label>-->
+    <!--<input type="radio"> 单元：宽松古着感少女cec短袖港味心机t恤女夏装小众2019新款学生上-->
+    <!--</label>-->
+    <!--</div>-->
+    <!--<div class="mb10">-->
+    <!--<label>-->
+    <!--<input type="radio"> 单元：宽松古着感少女cec短袖港味心机t恤女夏装小众2019新款学生上-->
+    <!--</label>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div class="ml10">-->
+    <!--<div class="mb10 mt10">计划：CPC_热销短袖</div>-->
+    <!--<div class="ml20">-->
+    <!--<div class="mb10">-->
+    <!--<label>-->
+    <!--<input type="radio"> 单元：宽松古着感少女cec短袖港味心机t恤女夏装小众2019新款学生上-->
+    <!--</label>-->
+    <!--</div>-->
+    <!--<div class="mb10">-->
+    <!--<label>-->
+    <!--<input type="radio"> 单元：宽松古着感少女cec短袖港味心机t恤女夏装小众2019新款学生上-->
+    <!--</label>-->
+    <!--</div>-->
+    <!--<div class="mb10">-->
+    <!--<label>-->
+    <!--<input type="radio"> 单元：宽松古着感少女cec短袖港味心机t恤女夏装小众2019新款学生上-->
+    <!--</label>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <div class="ml30 mt20 mb10">
+        <button class="btn btn-primary" (click)="nextStep()">下一步</button>
+        <button class="btn btn-scondary ml10" (click)="activeModal.close('Close click')">取消</button>
+    </div>
+</div>

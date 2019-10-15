@@ -1,0 +1,74 @@
+<div class="fontS16 bg-fa pd16-2">添加创意</div>
+<div class="d-flex pd20">
+    <div class="" style="width:71%">
+        <div>
+            <div>
+                <div class="fontS16 mb10" >添加推广标题</div>
+                <input *ngIf="item" style="width:400px;" type="text" class="pl-1" [(ngModel)]="titlevalue">
+                <span class="ml10">{{this.titlevalue.length*2}}/60</span>
+            </div>
+            <div class="mt20 setCreative">
+                <!--<div class="d-flex justify-content-between mb6 mr20">-->
+                    <!--<div>系统文案推荐</div>-->
+                    <!--<a>换一换</a>-->
+                <!--</div>-->
+                <!--<ul class="">-->
+                    <!--<li>宽松半袖体恤洋气t恤</li>-->
+                    <!--<li>纯棉卫衣，穿着舒适亲肤。</li>-->
+                    <!--<li>白色的色调，简约又百搭。</li>-->
+                    <!--<li>半袖设计，修饰手臂线条。</li>-->
+                    <!--<li>一件t恤就可以搭遍所有时尚单品</li>-->
+                    <!--<li>一件t恤就能搭遍所有时尚单品</li>-->
+                    <!--<li>一抹清新蓝，自然又养眼</li>-->
+                    <!--<li>一件t恤就能搭遍整个衣柜</li>-->
+                <!--</ul>-->
+            </div>
+        </div>
+        <div class="mt10">
+            <div class="d-flex align-items-baseline">
+                <div class="fontS16">选择创意图片</div>
+                <span class="ml10 color999">尺寸要求：方图为800x800；大小500k以内；支持JPG / JPEG / PNG。/60</span>
+            </div>
+            <div class="mt10 optCreative" *ngIf="item">
+                <ul>
+                    <ng-template ngFor let-itemImg  [ngForOf]="item.itemImgs" let-i="index">
+                    <!--<li>上传图片</li>-->
+                    <li>
+                        <img class="widthP100" src="{{itemImg.url}}" (click)="onchange(itemImg)">
+                    </li>
+                        </ng-template>
+                    <!--<li>-->
+                        <!--<img class="widthP100" src="../../../content/images/img123.jpg">-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<img class="widthP100" src="../../../content/images/img123.jpg">-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<img class="widthP100" src="../../../content/images/img123.jpg">-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<img class="widthP100" src="../../../content/images/img123.jpg">-->
+                    <!--</li>-->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div style="width:40%" *ngIf="item">
+        <div class="fontS16 pb20">创意预览</div>
+        <div class="border-c pd16-2">
+            <img class="widthP100" src="{{mainurl}}">
+            <p class="fontS16  pb10 pt20">{{item}}</p>
+            <p class="fontS12">{{item}}</p>
+        </div>
+    </div>
+</div>
+<div class="ml30 pb30">
+    <button class="btn btn-primary"
+            cjtjConfirmationPopover
+            title="提示"
+            [onBeforePopover]="popoverCheck"
+            message="确定添加创意吗，直通车后台会同步添加？"
+            (confirm)="submit()">确定</button>
+        <button class="btn btn-scondary ml10" (click)="previousstep()">返回上一步</button>
+        <button class="btn btn-scondary ml10" (click)="activeModal.close('Close click')">取消</button>
+</div>

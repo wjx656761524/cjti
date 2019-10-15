@@ -1,0 +1,69 @@
+<div class="content">
+    <div class="content widthP92 mt20">
+        <div class="bg-fff mt20 pb20">
+            <div>
+                <div class="d-flex justify-content-between border-b date-title align-items-center">
+                    <ul class="d-flex">
+                        <li><a href="commodity-report.html" style="color:#3c7bfc">计划</a></li>
+                        <li><a routerLink="/report/adGroup">单元</a></li>
+                        <li><a routerLink="/report/crowd">定向</a></li>
+                        <li><a routerLink="/report/location">资源位</a></li>
+                        <li><a routerLink="/report/creative">创意</a></li>
+                    </ul>
+                    <div class="mr20 d-flex align-items-center">
+                        <cjtj-report-date-select (onSelectChange)="onDateSelectChange($event)"></cjtj-report-date-select>
+                            <input type="text" class="pdl10" placeholder="搜索" [(ngModel)]="queryParams.campaignName" (ngModelChange)="query()">
+                        <!--                        <div><button class="btn btn-scondary ml10">更多数据</button></div>-->
+                        <cjtj-report-columns-select business="adcampaign" (onSelectChange)="onColumnsSelectChange($event)"></cjtj-report-columns-select>
+                    </div>
+                </div>
+                <div class="detail-date commodity-date mlrP2">
+                    <ul>
+                        <ng-template ngFor let-reportField [ngForOf]="fields" ]>
+                            <li *ngIf="selectColumns.indexOf(reportField.field) >= 0">
+                                <div class="color777">{{reportField.title}}</div>
+                                <div > {{allCampaignReport? reportField.isLZY? (allCampaignReport[reportField.field] | fzy) :allCampaignReport[reportField.field] : 0}}</div>
+                            </li>
+                        </ng-template>
+                    </ul>
+                </div>
+            </div>
+            <div class="mlrP1">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>计划信息</th>
+                        <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                            <th *ngIf="selectColumns.indexOf(reportField.field) >= 0" >
+                                {{reportField.title}}
+                            </th>
+                        </ng-template>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="campaign">
+                    <ng-template ngFor let-location [ngForOf]="campaign" let-i="index">
+                        <tr>
+                            <td>
+                                <div class="left-content pd1-0 lineHeight20">
+                                    <h6 class="mb6"> {{location.info.campaignName}}</h6>
+                                    <ul style="width:290px;" class="color999">
+                                        <li>计划:<a class="color-h-brand"></a> {{location.info.campaignName}}</li>
+                                        <li class="left-imgTitle">单元:<a class="color-h-brand">{{location.info.campaignName}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                                <td  *ngIf="selectColumns.indexOf(reportField.field) >= 0">{{location.report? reportField.isLZY? (location.report[reportField.field] | fzy) :location.report[reportField.field] : 0 }}</td>
+                            </ng-template>
+                        </tr>
+                    </ng-template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 page">
+        <cjtj-pagination #pagination [setCount]=" filtercampaign.length" [setPage]="page" [pageSize]="pageSize" (onPageChange)="pageChange($event)" ></cjtj-pagination>
+    </div>
+</div>

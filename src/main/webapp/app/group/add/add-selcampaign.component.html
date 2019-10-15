@@ -1,0 +1,19 @@
+<div class="bg-fff mlr10-auto">
+    <div class="fontS16 bg-fa pd16-2">选择计划</div>
+    <div class="pd20">
+        <input type="text" placeholder="搜索" class="pdl10 ml10"  [(ngModel)]="queryParams.campaignName" (ngModelChange)="query()">
+        <div class="ml10 mt10" *ngIf="filteredCampaigns">
+            <ng-template ngFor let-campaign [ngForOf]="filteredCampaigns" let-i="index">
+                <div class="mb10"  >
+                    <label>
+                        <input type="radio"[value]="campaign.info.campaignId" [(ngModel)]="engineGroup.campaignId" (click)="edit(campaign)"> {{campaign.info.campaignName}}
+                    </label>
+                </div>
+            </ng-template>
+        </div>
+        <div class="ml30 mt20 mb10">
+            <button class="btn btn-primary" (click)="nextStep()">确定</button>
+            <button class="btn btn-scondary ml10" routerLink="/group" >取消</button>
+        </div>
+    </div>
+</div>

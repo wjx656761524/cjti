@@ -1,0 +1,31 @@
+<div class="navbar">
+    <div class="flow-logo">
+        <img src="../../../content/images/cjgj-logo.png">
+    </div>
+    <div class="d-flex widthP100 justify-content-between">
+        <div *ngIf="isAuthenticated()">
+            <ul class="nav-item">
+                <li ><a routerLink="/">首页</a></li>
+                <li><a routerLink="/campaign">计划</a></li>
+                <li><a routerLink="/report">报表</a></li>
+                <li><a target="_blank" href="https://tuijian.taobao.com/indexbp.html?spm=a2et4.11816922.88888888.d60a03e63.6daf1f5651VLKl#!/account/index">账户</a></li>
+                <!-- <li>妈妈CLUB</li> -->
+            </ul>
+        </div>
+        <div *ngIf="isAuthenticated()">
+            <ul class="topnav_box d-flex">
+                <li style="width:150px;">当前版本：基础版</li>
+                <li style="width:200px;">用户名： 荣事达唐悦专卖店</li>
+                <li style="width:150px;">
+                    <span>客服旺旺：</span>
+                    <a target="_blank" href="http://www.taobao.com/webww/ww.php?ver=3&touid=tp_%E6%B4%AA%E6%B5%B7%E9%BE%99%E8%85%BE%3A%E9%92%BB%E9%92%BB&siteid=cntaobao&status=1&charset=utf-8">
+                        <div class="icon icon-service"></div>
+                    </a>
+                </li>
+<!--                <li>旺旺</li>-->
+<!--                <li>信息</li>-->
+            </ul>
+        </div>
+    </div>
+</div>
+

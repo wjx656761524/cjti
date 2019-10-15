@@ -1,0 +1,132 @@
+<div class="content">
+    <div class="content mt20 plan">
+        <div class="bg-fff mt20 pb20">
+            <div>
+                <div *ngIf="show">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a routerLink="/campaign" style="color:#3c7bfc;font-size: 13px;text-decoration : none;vertical-align:middle">所有商品推广计划 <img src="../../content/images/dayuhao.png"> </a>
+                    <span style="vertical-align:middle">计划：</span><a style="vertical-align:middle" routerLink="/group" [queryParams]="{campaignId:queryParams.campaignId,campaignName:campaignName}">{{campaignName}}</a><span style="vertical-align:middle" *ngIf="groupName != undefined"><img src="../../content/images/dayuhao.png">单元：{{groupName}}</span>
+                </div>
+                <div class="d-flex justify-content-between border-b date-title align-items-center">
+                    <ul class="d-flex">
+                        <li *ngIf="campaignShow"> <a routerLink="/campaign">计划</a></li>
+                        <li *ngIf="groupShow"><a routerLink="/group" [queryParams]="{campaignId:campaignId,campaignName:campaignName}">单元</a></li>
+                        <li><a routerLink="/crowd" [queryParams]="{campaignId:campaignId,groupId:groupId,campaignName:campaignName,groupName:groupName}">定向</a></li>
+                        <li><a routerLink="/location" [queryParams]="{campaignId:campaignId,groupId:groupId,campaignName:campaignName,groupName:groupName}"style="color:#3c7bfc">资源位</a></li>
+                        <li><a routerLink="/creative" [queryParams]="{campaignId:campaignId,groupId:groupId,campaignName:campaignName,groupName:groupName}">创意</a></li>
+                    </ul>
+                    <div class="mr20 d-flex align-items-center">
+                        <cjtj-report-date-select (onSelectChange)="onDateSelectChange($event)"></cjtj-report-date-select>
+                        <input type="text" class="pdl10" placeholder="广告位名称" [(ngModel)]="queryParams.adzoneName" (ngModelChange)="query()">
+                        <!--                        <div><button class="btn btn-scondary ml10">更多数据</button></div>-->
+                        <cjtj-report-columns-select business="adgroup" (onSelectChange)="onColumnsSelectChange($event)"></cjtj-report-columns-select>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex justify-content-between plan-btn">
+                        <div class="d-flex align-items-center">
+                                <button class="btn-primary btn mr10"(click)="addLocation()">新增资源位</button>
+                                <!--<a><button class="btn-scondary btn mr10">批量溢价</button></a>-->
+                            <a><button type="button" class="btn btn-scondary mr-2"
+                                       cjtjConfirmationPopover
+                                       title="提示"
+                                       [onBeforePopover]="popoverCheck"
+                                       message="确定删除选择的广告位，直通车后台会同步删除？"
+                                       (confirm)="batchDeleteLocations()">批量删除</button> </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mlrP1">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" [(ngModel)]="allSelect" (change)="clickSelectAll()">
+                                </th>
+                                <th>资源位信息</th>
+                                <th>溢价</th>
+                                <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                                    <th *ngIf="selectColumns.indexOf(reportField.field) >= 0" >
+                                        {{reportField.title}}
+                                    </th>
+                                </ng-template>
+                                <!--<th>消耗</th>-->
+                                <!--<th>展现量</th>-->
+                                <!--<th>点击量</th>-->
+                                <!--<th>点击率</th>-->
+                                <!--<th>千次展现成本</th>-->
+                                <!--<th>点击成本</th>-->
+                                <!--<th>收藏宝贝量</th>-->
+                                <!--<th>添加购物车量</th>-->
+                                <!--<th>投资回报率</th>-->
+                                <!--<th>成交订单量</th>-->
+                                <!--<th>成交订单金额</th>-->
+                                <!--<th>点击转化率</th>-->
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="locations">
+                        <ng-template ngFor let-location [ngForOf]="locations" let-i="index">
+                            <tr>
+                                <td>
+                                    <input type="checkbox"  [(ngModel)]="location.checked" [disabled]="location.info.adzoneId == -99?true: false">
+                                </td>
+
+                                <td>
+                                    <div class="left-content pd1-0 lineHeight20">
+                                        <h6 class="mb6"> {{location.info.adzoneName}}</h6>
+                                        <ul style="width:290px;" class="color999">
+                                            <li>计划:<a class="color-h-brand"></a> {{location.info.campaignName}}</li>
+                                            <li class="left-imgTitle">单元:<a class="color-h-brand">{{location.info.groupName}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td >
+                                    <span class="mr-2">{{location.info.discount}}&nbsp;%</span>
+                                    <i class="fa fa-pencil hover-show" *ngIf="location.info.discount != 1" title="编辑资源位溢价" [contentTemplate]="updatePremiumRatioTemplate"
+                                       (onPopover)="updatePopover(location.info)" (confirm)="updateLocations(location.info)"  cjtjConfirmationPopover>
+                                        <img src="../../content/images/icon-pencil.png"></i>
+
+                                </td>
+                                <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                                    <td  *ngIf="selectColumns.indexOf(reportField.field) >= 0">{{location.report? reportField.isLZY? (location.report[reportField.field] | fzy) :location.report[reportField.field] : 0 }}</td>
+                                </ng-template>
+                                <!--<td>6.43</td>-->
+                                <!--<td>1524</td>-->
+                                <!--<td>18</td>-->
+                                <!--<td>1.18%</td>-->
+                                <!--<td>4.22</td>-->
+                                <!--<td>0.36</td>-->
+                                <!--<td>2</td>-->
+                                <!--<td>2</td>-->
+                                <!--<td>0.00</td>-->
+                                <!--<td>0</td>-->
+                                <!--<td>0.00</td>-->
+                                <!--<td>0%</td>-->
+                            </tr>
+                            </ng-template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="mt-2 page">
+
+            <cjtj-pagination #pagination [setCount]=" filterLocations.length" [setPage]="page" [pageSize]="pageSize" (onPageChange)="pageChange($event)" ></cjtj-pagination>
+        </div>
+    </div>
+<ng-template #updatePremiumRatioTemplate>
+    <div class="">
+        <div>溢价比例：
+            <input class="border-c" style="height: 2rem; width: 10rem;padding-left: 0.5rem;margin-right: 0.2rem" [style.color]="updateLocation.premiumRatio<1||updateLocation.premiumRatio>300?'red':'black'"
+                                                     [(ngModel)]="updateLocation.premiumRatio" type="number" max="300" min="1" step="1"  placeholder="1-300"/>%
+
+
+        </div>
+        <div class="pd10" style="background-color: #f3f5fa; margin: 0.5rem 0;">
+            <p>建议溢价：-：</p>
+        </div>
+    </div>
+</ng-template>
+

@@ -1,0 +1,90 @@
+<div class="content">
+    <div class="content mt20 plan">
+        <div class="bg-fff mt20 pb20">
+            <div>
+                <div class="d-flex justify-content-between border-b date-title align-items-center">
+                    <ul class="d-flex">
+                        <li *ngIf="campaignShow"> <a routerLink="/report/campaign">计划</a></li>
+                        <li *ngIf="groupShow"><a routerLink="/report/adgroup">单元</a></li>
+                        <li><a routerLink="/report/crowd" [queryParams]="{campaignId:campaignId,groupId:groupId}">定向</a></li>
+                        <li><a routerLink="/report/location" [queryParams]="{campaignId:campaignId,groupId:groupId}"style="color:#3c7bfc">资源位</a></li>
+                        <li><a routerLink="/report/creative" [queryParams]="{campaignId:campaignId,groupId:groupId}">创意</a></li>
+                    </ul>
+                    <div class="mr20 d-flex align-items-center">
+                        <cjtj-report-date-select  (onSelectChange)="onDateSelectChange($event)"></cjtj-report-date-select>
+                        <input type="text" class="pdl10" placeholder="创意名称" [(ngModel)]="queryParams.creativeName" (ngModelChange)="query()">
+
+                        <!--                        <div><button class="btn btn-scondary ml10">更多数据</button></div>-->
+                        <cjtj-report-columns-select business="adgroup" (onSelectChange)="onColumnsSelectChange($event)"></cjtj-report-columns-select>
+                    </div>
+                </div>
+                <div class="detail-date commodity-date mlrP2" *ngIf="fields">
+                    <ul>
+                        <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                            <li *ngIf="selectColumns.indexOf(reportField.field) >= 0">
+                                <div class="color777">{{reportField.title}}</div>
+                                <div > {{allCreativeReport? reportField.isLZY? (allCreativeReport[reportField.field] | fzy) :allCreativeReport[reportField.field] : 0}}</div>
+                            </li>
+                        </ng-template>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="mlrP1">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>创意信息</th>
+                        <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                            <th *ngIf="selectColumns.indexOf(reportField.field) >= 0" >
+                                {{reportField.title}}
+                            </th>
+                        </ng-template>
+                    </tr>
+                    </thead>
+                    <tbody  *ngIf="creatives">
+                    <ng-template ngFor let-creative [ngForOf]="creatives" let-i="index">
+                    <tr>
+                        <td>
+                            <div class="d-flex left-content align-items-center pd1-0">
+                                <div style="width:68px">
+                                    <img class="w-100" src="{{creative.info.imgUrl}}">
+                                </div>
+                                <ul class="pl10">
+                                    <li>
+                                        <a class="ml6 color333" routerLink="/report/adGroup" [queryParams]="{campaignId:creative.info.campaignId,creativeId:creative.info.creativeId}">
+                                            {{creative.info.creativeName}}
+                                        </a>
+                                    </li>
+                                    <li class="color999">创意ID：<span>{{creative.info.creativeId}}</span></li>
+                                    <li class="color999">计划:
+                                        <a class="ml6 color333" routerLink="/report" [queryParams]="{campaignId:creative.info.campaignId,creativeId:creative.info.creativeId}">
+                                            {{creative.info.campaignName}}
+                                        </a>
+                                    </li>
+                                   <!-- <li class="color999">单元:
+                                        <span class="color-h-brand">{{creative.info.groupName}}</span>
+                                    </li>
+                                    <li class="color999">创意类型:
+                                        <span>图片</span>
+                                    </li>
+                                    <li class="color999">创意尺寸:
+                                        <span></span>
+                                    </li>
+                                    -->
+                                </ul>
+                            </div>
+                        </td>
+                        <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                            <td  *ngIf="selectColumns.indexOf(reportField.field) >= 0">{{creative.report? reportField.isLZY? (creative.report[reportField.field] | fzy) :creative.report[reportField.field] : 0 }}</td>
+                        </ng-template>
+                    </tr>
+                    </ng-template>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <cjtj-pagination #pagination [setCount]="filterCreatives.length" [setPage]="page" [pageSize]="pageSize" (onPageChange)="pageChange($event)" ></cjtj-pagination>
+</div>

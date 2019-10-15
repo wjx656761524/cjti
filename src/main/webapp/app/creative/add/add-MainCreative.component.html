@@ -1,0 +1,8 @@
+<div style="width:980px;" class="bg-fff mlr10-auto">
+    <!--<button type="button"  (click)="activeModal.close('Close click')"/>-->
+    <!--<div [ngClass]="adgroupClass">第一步&nbsp;新建推广单元</div>-->
+    <!--<div class="next-a">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</div>-->
+    <!--<div [ngClass]="locationClass">第二步&nbsp;新建资源位</div>-->
+    <cjti-add-creative *ngIf="showAddAdgroupPage" (onShowPage)="onShowPage($event)" [activeModal]="activeModal" ></cjti-add-creative>
+    <cjtj-addSecond-creative *ngIf="showAddCreativePage"   [activeModal]="activeModal" [item]="item" [titlevalue]="titleValue"[mainurl]="mainurl" (onShowPage)="onShowPage($event)" (onSuccess)="onAddCreativeSuccess($event)"></cjtj-addSecond-creative>
+</div>

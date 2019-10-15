@@ -1,0 +1,30 @@
+<div class="report-columns-select-container">
+    <div ngbDropdown #columnsSelect="ngbDropdown" [placement]="'bottom-right'" class="d-inline-block"  [autoClose]="false">
+        <button class="btn btn-scondary ml10" id="columns-select-btn" ngbDropdownToggle>
+            <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;更多数据
+        </button>
+        <div ngbDropdownMenu aria-labelledby="columns-select-btn" class="report-columns-select-item">
+            <div class="select-item-warnText">
+                <span>建议您选择2~6项，选择数量过多，可能影响您操作的便利性！</span>
+            </div>
+            <div class="col">
+                <ul class="columns-list">
+                    <ng-template ngFor let-column [ngForOf]="allColumns" let-i="index">
+                         <li class="columns-item">
+                            <input type="checkbox"
+                                       name="columns"
+                                       value="{{column.field}}"
+                                       [checked]="selectColumns.indexOf(column.field) >= 0"
+                                       (change)="updateSelectColumn(column, $event)"/>
+                             <label>{{column.title}}</label>
+                         </li>
+                     </ng-template>
+                 </ul>
+             </div>
+             <div class="col mb-3 pl-4 pt-2">
+                 <button class="btn-mini btn-primary mr-2" (click)="enterSelect()">确定</button>
+                 <button class="btn-mini btn-scondary" (click)="cancelSelect()">取消</button>
+             </div>
+        </div>
+    </div>
+</div>

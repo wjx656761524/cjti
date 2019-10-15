@@ -1,0 +1,52 @@
+<div class="report-date-select bottom-right" >
+    <div class="report-date-dropdown no-icon"
+         ngbDropdown
+         [placement]="'bottom-right'"
+         [autoClose]="'outside'"
+         #reportDateSelect="ngbDropdown">
+
+        <div class="form-group" ngbDropdownAnchor >
+            <div class="input-group"  (click)="$event.stopPropagation();reportDateSelect.toggle()" style="cursor: pointer">
+                <input class="mr10 btn btn-outline plan-date" readonly [value]="isRealTime? '今日实时' : (startDate + ' / '+ (endDate||'')) ">
+<!--                <div class="input-group-append" >-->
+<!--                    <button class="btn border-c" type="button" >-->
+<!--                        <i class="fa fa-calendar" aria-hidden="true"></i>-->
+<!--                    </button>-->
+<!--                </div>-->
+            </div>
+        </div>
+        <div ngbDropdownMenu style="width: 605px">
+            <div class="d-flex border">
+                <ngb-datepicker #dp (select)="onDateChange($event)"
+                                [startDate]="minDate"
+                                [minDate]="minDate"
+                                [maxDate]="lastDay"
+                                [displayMonths]="2"
+                                [navigation]="'none'"
+                                [dayTemplate]="dayTemplate">
+                </ngb-datepicker>
+                <div class="quick-select">
+                    <button type="button" class="btn btn-link" (click)="changeSelectDate(true)">今日实时</button>
+                    <button type="button" class="btn btn-link" (click)="changeSelectDate(false,1)">昨天</button>
+                    <button type="button" class="btn btn-link" (click)="changeSelectDate(false,7)">过去7天</button>
+                    <button type="button" class="btn btn-link" (click)="changeSelectDate(false,15)">过去15天</button>
+                    <button type="button" class="btn btn-link" (click)="changeSelectDate(false,30)">过去30天</button>
+<!--                    <button type="button" class="btn btn-link" (click)="changeSelectDate(false,90)">过去90天</button>-->
+                </div>
+            </div>
+        </div>
+
+        <ng-template #dayTemplate let-date="date" let-focused="focused">
+          <span class="custom-day"
+                [class.focused]="focused"
+                [class.range]="isFrom(date) || isTo(date) || isInside(date) || isHovered(date)"
+                [class.faded]="isHovered(date) || isInside(date)"
+                [class.out-range]="isOutRange(date)"
+                (mouseenter)="hoveredDate = date"
+                (mouseleave)="hoveredDate = null">
+            {{ date.day }}
+          </span>
+        </ng-template>
+    </div>
+</div>
+

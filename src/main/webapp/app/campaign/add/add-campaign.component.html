@@ -1,0 +1,39 @@
+
+<div class="bg-fff mt20 pb20">
+    <div class="d-flex pd1-2">
+        <div class="fontS16 ml10"><span class="primary-color">设置计划</span>----</div>
+        <div class="fontS16"><span>设置单元</span>----</div>
+        <div class="fontS16"><span>完成创建</span></div>
+    </div>
+    <div class="ml20 mr20 pb20">
+        <div class="fontS16 pd1-2 border-b bg-fa">基本信息</div>
+        <div>
+            <div class="ml20 pt20 pl10">
+                <label class="mr20">计划名称</label>
+                <input type="text" placeholder="超级推荐_商品推广_20190429_140001" class="pl10" [(ngModel)]="campaignName" (onSelectChange)="query()">
+            </div>
+            <div class="ml20 pt20 pl10">
+                <label class="mr20">投放日期</label>
+                <input type="date" [(ngModel)]="startTime">--<input type="date" [(ngModel)]="endTime">
+                <!--<cjtj-report-date-select (onSelectChange)="onDateSelectChange($event)"></cjtj-report-date-select>-->
+            </div>
+            <div class="ml20 pt20 pl10">
+                <label class="mr20">每日预算</label>
+                <input type="text" class="pl10"   [(ngModel)]="dayBudget" (onSelectChange)="dayBudgetCheck()">元
+            </div>
+            <div class="ml20 pt20 pl10">
+                <label class="mr20">付费方式</label>
+                <span>按点击付费（CPC）</span>
+            </div>
+            <!--<div class="ml20 pt20 pl10">-->
+                <!--<label class="mr20">高级设置</label>-->
+                <!--<span class="primary-color">展开高级设置</span>-->
+            <!--</div>-->
+        </div>
+    </div>
+    <div class="ml40 pt20">
+        <button class="btn-primary btn" (click)="nextStep()">下一步，设置推广单元</button>
+        <button class="btn btn-scondary ml10" (click)="activeModal.close('Close click')">取消</button>
+    </div>
+</div>
+

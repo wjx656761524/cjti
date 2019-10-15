@@ -1,0 +1,129 @@
+<div class="content">
+    <div class="content mt20 plan">
+        <div class="bg-fff mt20 pb20">
+            <div>
+                <div *ngIf="show">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a routerLink="/campaign" style="color:#3c7bfc;font-size: 13px;text-decoration : none;vertical-align:middle">所有商品推广计划 <img src="../../content/images/dayuhao.png"> </a>
+                    <span style="vertical-align:middle">计划：</span><a style="vertical-align:middle" routerLink="/group" [queryParams]="{campaignId:queryParams.campaignId,campaignName:campaignName}">{{campaignName}}</a><span style="vertical-align:middle" *ngIf="groupName != undefined"><img src="../../content/images/dayuhao.png">单元：{{groupName}}</span>
+                </div>
+                <div class="d-flex justify-content-between border-b date-title align-items-center">
+                    <ul class="d-flex">
+                        <li *ngIf="campaignShow"><a routerLink="/campaign">计划</a></li>
+                        <li *ngIf="groupShow"><a routerLink="/group" [queryParams]="{campaignId:campaignId,groupId:groupId,campaignName:campaignName,groupName:groupName}">单元</a></li>
+                        <li><a routerLink="/crowd" [queryParams]="{campaignId:campaignId,groupId:groupId,campaignName:campaignName,groupName:groupName}">定向</a></li>
+                        <li><a routerLink="/location" [queryParams]="{campaignId:campaignId,groupId:groupId,campaignName:campaignName,groupName:groupName}">资源位</a></li>
+                        <li><a routerLink="/creative" [queryParams]="{campaignId:campaignId,groupId:groupId,campaignName:campaignName,groupName:groupName}"style="color:#3c7bfc">创意</a></li>
+                    </ul>
+                    <div class="mr20 d-flex align-items-center">
+                        <cjtj-report-date-select (onSelectChange)="onDateSelectChange($event)"></cjtj-report-date-select>
+                        <input type="text"  class="pdl10"  placeholder="创意名称" [(ngModel)]="queryParams.creativeName" (ngModelChange)="query()">
+                        <!--                        <div><button class="btn btn-scondary ml10">更多数据</button></div>-->
+                        <cjtj-report-columns-select business="adgroup" (onSelectChange)="onColumnsSelectChange($event)"></cjtj-report-columns-select>
+                    </div>
+                </div>
+                    <div>
+                        <div class="d-flex justify-content-between plan-btn">
+                            <div class="d-flex align-items-center">
+                            <button class="btn-primary btn mr10" (click)="addCreative()">添加创意</button>
+                                <a><button type="button" class="btn btn-scondary mr-2"
+                                           cjtjConfirmationPopover
+                                           title="提示"
+                                           [onBeforePopover]="popoverCheck"
+                                           message="确定删除选择创意，直通车后台会同步删除？"
+                                           (confirm)="batchDeleteCreatives()">批量移除</button> </a>
+                               <!--<select>-->
+                                <!--<Label>全部状态</Label>-->
+                                <!--<Label>待审核</Label>-->
+                                <!--<Label>审核通过</Label>-->
+                                <!--<Label>审核拒绝</Label>-->
+                            <!--</select>-->
+
+
+                                <select (change)="onchange($event.target.value)" class="select">
+                                    <option value="A">全部状态</option>
+                                    <option *ngFor="let option of options" [value]="option.auditStatus">{{option.result}}</option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mlrP1">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" [(ngModel)]="allSelect" (change)="clickSelectAll()">
+                                </th>
+                                <th>创意信息</th>
+                                <th>创意状态</th>
+                                <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                                    <th *ngIf="selectColumns.indexOf(reportField.field) >= 0" >
+                                        {{reportField.title}}
+                                    </th>
+                                </ng-template>
+                                <!--<th>消耗</th>-->
+                                <!--<th>展现量</th>-->
+                                <!--<th>点击量</th>-->
+                                <!--<th>点击率</th>-->
+                                <!--<th>千次展现成本</th>-->
+                                <!--<th>点击成本</th>-->
+                                <!--<th>收藏宝贝量</th>-->
+                                <!--<th>添加购物车量</th>-->
+                                <!--<th>投资回报率</th>-->
+                                <!--<th>成交订单量</th>-->
+                                <!--<th>成交订单金额</th>-->
+                                <!--<th>点击转化率</th>-->
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="creatives">
+                        <ng-template ngFor let-creative [ngForOf]="creatives" let-i="index">
+                            <tr>
+                                <td>
+                                    <input type="checkbox"  [(ngModel)]="creative.checked">
+                                </td>
+                                <td>
+                                    <div class="d-flex left-content align-items-center pd1-0">
+                                        <div style="width:68px">
+                                           <img class="w-100" src="{{creative.info.imgUrl}}">
+                                        </div>
+                                        <ul class="pl10">
+                                            <li class="left-imgTitle"> {{creative.info.creativeName}}</li>
+
+                                            <li class="color999">创意ID：<span>{{creative.info.creativeId}}</span></li>
+                                            <li class="color999">计划:
+                                                <span class="color-h-brand">{{creative.info.campaignName}}</span>
+                                            </li>
+                                            <li class="color999">单元:
+                                                <span class="color-h-brand">{{creative.info.groupName}}</span>
+                                            </li>
+                                            <li class="color999">创意类型:
+                                                <span>图片</span>
+                                            </li>
+                                            <li class="color999">创意尺寸:
+                                                <span></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span   style="color:#30ab66" *ngIf="creative.info.auditStatus === 'W'">待审核</span>
+                                    <span  style="color:#30ab66" *ngIf="creative.info.auditStatus === 'P'">审核通过</span>
+                                    <span  style="color:#30ab66" *ngIf="creative.info.auditStatus === 'R'">审核拒绝</span>
+                                </td>
+                                <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                                    <td  *ngIf="selectColumns.indexOf(reportField.field) >= 0">{{creative.report? reportField.isLZY? (creative.report[reportField.field] | fzy) :creative.report[reportField.field] : 0 }}</td>
+                                </ng-template>
+                            </tr>
+                        </ng-template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <div class="mt-2 page">
+        <cjtj-pagination #pagination [setCount]="filterCreatives.length" [setPage]="page" [pageSize]="pageSize" (onPageChange)="pageChange($event)" ></cjtj-pagination>
+    </div>
+
+    </div>
+

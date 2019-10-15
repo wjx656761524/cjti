@@ -1,0 +1,96 @@
+<div class="content">
+    <div class="content mt20 plan">
+        <div class="bg-fff mt20 pb20">
+            <div>
+                <div class="d-flex justify-content-between border-b date-title align-items-center">
+                    <ul class="d-flex">
+                        <li *ngIf="campaignShow"><a routerLink="/campaign">计划</a></li>
+                        <li><a routerLink="/report/adgroup"[queryParams]="{campaignId:campaignId}" style="color:#3c7bfc">单元</a></li>
+                        <li><a routerLink="/report/crowd"[queryParams]="{campaignId:campaignId}">定向</a></li>
+                        <li><a routerLink="/report/location"[queryParams]="{campaignId:campaignId}">资源位</a></li>
+                        <li><a routerLink="/report/creative"[queryParams]="{campaignId:campaignId}">创意</a></li>
+                    </ul>
+                    <div class="mr20 d-flex align-items-center">
+                        <cjtj-report-date-select  (onSelectChange)="onDateSelectChange($event)"></cjtj-report-date-select>
+                        <input type="text" class="pdl10" placeholder="单元名称" [(ngModel)]="queryParams.groupName" (ngModelChange)="query()">
+                        <!--                        <div><button class="btn btn-scondary ml10">更多数据</button></div>-->
+                        <cjtj-report-columns-select business="adgroup" (onSelectChange)="onColumnsSelectChange($event)"></cjtj-report-columns-select>
+                    </div>
+                </div>
+                <div class="detail-date commodity-date mlrP2" *ngIf="fields">
+                    <ul>
+                    <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                        <li *ngIf="selectColumns.indexOf(reportField.field) >= 0">
+                            <div class="color777">{{reportField.title}}</div>
+                            <div > {{allCreativeeport? reportField.isLZY? (allCreativeeport[reportField.field] | fzy) :allCreativeeport[reportField.field] : 0}}</div>
+                        </li>
+                    </ng-template>
+                    </ul>
+
+                </div>
+
+            </div>
+            <div class="mlrP1">
+                <table class="table table-hover">
+                    <thead>
+                    <!--<tr>-->
+                        <!--<th>状态</th>-->
+                        <!--<th>单元信息</th>-->
+                        <!--<th>消耗</th>-->
+                        <!--<th>展现量</th>-->
+                        <!--<th>点击量</th>-->
+                        <!--<th>点击率</th>-->
+                        <!--<th>引导进店潜客人数</th>-->
+                        <!--<th>引导进店率</th>-->
+                        <!--<th>拉新成本</th>-->
+                        <!--<th>收藏宝贝量</th>-->
+                        <!--<th>添加购物车量</th>-->
+                        <!--<th>拍下订单量</th>-->
+                        <!--<th>拍下订单金额</th>-->
+                        <!--<th>成交订单量</th>-->
+                        <!--<th>成交订单金额</th>-->
+                        <!--<th>投资回报率</th>-->
+                        <!--<th>点击转化率</th>-->
+                    <!--</tr>-->
+                    <tr>
+                        <th>状态</th>
+                        <th>单元信息</th>
+                        <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                            <th *ngIf="selectColumns.indexOf(reportField.field) >= 0" >
+                                {{reportField.title}}
+                            </th>
+                        </ng-template>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="groups">
+                    <ng-template ngFor let-group [ngForOf]="groups" let-i="index">
+                    <tr>
+                        <td >
+                            <div class="putInstatus">
+                                <div class="putInshow">
+                                    <img *ngIf="group.info.status === 'START'" class="widthP100" src="../../../content/images//open.png">
+                                    <img *ngIf="group.info.status === 'PAUSE'" class="widthP100" src="../../../content/images/stop.png">
+                                    <img *ngIf="group.info.status === 'TERMINATE'" class="widthP100" src="../../../content/images/delete.png">
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex left-content align-items-center pd1-0">
+                                <ul class="pl10" style="width:168px;">
+                                    <a class="ml6 color333" routerLink="/report/location" [queryParams]="{campaignId:group.info.campaignId,groupId:group.info.groupId}">{{group.info.groupName}} </a>
+                                    <li class="color999">单元:<span class="color-h-brand">{{group.info.groupName}}</span></li>
+                                </ul>
+                            </div>
+                        </td>
+                        <ng-template ngFor let-reportField [ngForOf]="fields" let-i="index">
+                            <td  *ngIf="selectColumns.indexOf(reportField.field) >= 0">{{group.report? reportField.isFZY? (group.report[reportField.field] | fzy) :group.report[reportField.field] : 0 }}</td>
+                        </ng-template>
+                    </tr>
+                    </ng-template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <cjtj-pagination #pagination [setCount]="filteredGroups.length" [setPage]="page" [pageSize]="pageSize" (onPageChange)="pageChange($event)" ></cjtj-pagination>
+</div>

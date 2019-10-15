@@ -1,0 +1,15 @@
+version: '2'
+services:
+    cjtj-app:
+        image: cjtj
+        environment:
+            - _JAVA_OPTIONS=-Xmx512m -Xms256m
+            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_DATASOURCE_URL=jdbc:mysql://cjtj-mysql:3306/cjtj?useUnicode=true&characterEncoding=utf8&useSSL=false
+            - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
+        ports:
+            - 8080:8080
+    cjtj-mysql:
+        extends:
+            file: mysql.yml
+            service: cjtj-mysql
